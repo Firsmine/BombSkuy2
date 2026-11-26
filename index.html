@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>BomSkuy</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="home" id="homeScreen">
+        <img src="assets/logo.png" alt="BombSkuy" class="logoHome" />
+        <input
+          type="text"
+          id="usernameInput"
+          placeholder="Input Username"
+          class="input"
+        />
+        <select id="difficultyInput" class="input">
+          <option value="" disabled selected>Select Level</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+        <div class="buttonsHome">
+          <button id="btnStart" class="btn">Start</button>
+          <button id="btnInstruction" class="btn">Instruction</button>
+        </div>
+      </div>
+
+      <div class="modal" id="instructionModal">
+        <div class="head">
+          <h2>How to play game</h2>
+          <button class="btnClose" id="btnClose">X</button>
+        </div>
+        <ol>
+          <li>Input Username</li>
+          <li>Put the bomb</li>
+          <li>Blow up as many walls as possible</li>
+          <li>Blow up enemies</li>
+          <li>Enjoy!</li>
+        </ol>
+      </div>
+
+      <div class="gameScreen modal" id="gameScreen">
+        <div class="gameBoard" id="gameBoard"></div>
+        <div class="gameHUD" id="gameHUD">
+          <h1>BOMSKUY</h1>
+          <h3>Player : <span id="playerName">David</span></h3>
+          <h3>Time : <span id="timerHUD">00:00</span></h3>
+        </div>
+      </div>
+
+      <div class="modal" id="gameOverModal">
+        <h1>Game Over!</h1>
+        <p>
+          Good job <span id="playName"></span>! your time
+          <span id="playTime"></span> with results:
+        </p>
+        <div class="results">
+          <div class="resultInfo">
+            <img src="" alt="" class="resultImg" />
+            <h3>= <span id="wallsResult">4</span></h3>
+          </div>
+          <div class="resultInfo">
+            <img src="" alt="" class="resultImg" />
+            <h3>= <span id="bombResult">0</span></h3>
+          </div>
+          <div class="resultInfo">
+            <img src="" alt="" class="resultImg" />
+            <h3>= <span id="iceResult">1</span></h3>
+          </div>
+        </div>
+        <div class="buttonsGameOver">
+          <button id="btnSave" class="btn">Save Score</button>
+          <button id="btnLeadderboards" class="btn">Leaderboards</button>
+        </div>
+      </div>
+
+      <div class="modal" id="leaderboardModal">
+        <h1>Leaderboards</h1>
+        <table class="leaderboard" id="leaderboardTable">
+          <tr>
+            <th>Player Name</th>
+            <th>Time</th>
+            <th><img src="" alt="wallsCrack" /></th>
+            <th><img src="" alt="bomb" /></th>
+            <th><img src="" alt="ice" /></th>
+          </tr>
+          <tr></tr>
+        </table>
+        <div class="buttonsLeaderboard">
+          <button id="btnPlayAgain" class="btn">Play Again</button>
+          <button id="btnReset" class="btn">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
