@@ -8,6 +8,7 @@ const btnClose = document.getElementById("btnClose");
 const btnStart = document.getElementById("btnStart");
 const usernameInput = document.getElementById("usernameInput");
 const difficultyInput = document.getElementById("difficultyInput");
+const gameOverModal = document.getElementById("gameOverModal");
 
 let countInterval;
 let timerInterval;
@@ -95,6 +96,24 @@ function loadGame() {
   countdownModal.style.display = "none";
   gameScreen.style.display = "flex";
   gameState.isPlaying = true;
+  renderGraphics();
+  initBoard();
+  initPlayer();
+  initDogs();
+  requestAnimationFrame(gameLoop);
+}
+function gameLoop() {
+  if (!gameState.isPaused && gameState.isPlaying) {
+    updateGameLogic();
+    renderGraphics();
+  }
+  if (gameState.player.lives <= 0) {
+    handleGameOver(); //ui.js
+  } else if (gameState.dogs <= 0) {
+    handleWin();
+  } else {
+    requestAnimationFrame(gameLoop);
+  }
 }
 function startTimer() {
   setInterval(() => {
@@ -122,6 +141,21 @@ function updateHUD() {
     }
   }
 }
+
+const pauseModal = document.getElementById("pauseModal");
+window.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && gameState.isPlaying) {
+    gameState.isPaused = !gameState.isPaused;
+    pauseModal.classList.toggle("modal");
+  }
+  if (
+    !gameState.isPaused &&
+    gameState.isPlaying &&
+    !gameState.player.isFrozen
+  ) {
+    handlePlayerMovement(e.key);
+  }
+});
 
 function updateGameLogic() {
   updateDogs();
@@ -352,3 +386,160 @@ function checkItemCollision() {
     updateHUD();
   }
 }
+
+// render
+function renderGraphics() {
+  const mapArea = document.getElementById("gameBoard");
+  mapArea.innerHTML = "";
+
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (gameState.grid[y][x] !== 0) {
+        let div = document.createElement("div");
+        div.style.position = "absolute";
+        div.style.left = x * tile_size + "px";
+        div.style.top = y * tile_size + "px";
+        div.style.width = tile_size + "px";
+        div.style.height = tile_size + "px";
+        div.style.backgroundImage =
+          gameState.grid[y][x] === 2 ? "url('assets/wall.png')" : "none";
+        div.style.backgroundSize = "cover";
+        mapArea.appendChild(div);
+      }
+    }
+  }
+
+  gameState.items.forEach((item) => {
+    let div = document.createElement("img");
+    div.src = `assets/${item.type}.png`;
+    div.style.position = "absolute";
+    div.style.left = item.x * tile_size + "px";
+    div.style.top = item.y * tile_size + "px";
+    div.style.width = tile_size + "px";
+    div.style.height = tile_size + "px";
+    mapArea.appendChild(div);
+  });
+
+  gameState.bombs.forEach((bomb) => {
+    let div = document.createElement("img");
+    div.src = `assets/bomb.png`;
+    div.style.position = "absolute";
+    div.style.left = bomb.x * tile_size + "px";
+    div.style.top = bomb.y * tile_size + "px";
+    div.style.width = tile_size + "px";
+    div.style.height = tile_size + "px";
+    mapArea.appendChild(div);
+  });
+
+  gameState.dogs.forEach((dog) => {
+    let div = document.createElement("img");
+    div.src = `assets/dog_down.png`;
+    div.style.position = "absolute";
+    div.style.left = dog.x * tile_size + "px";
+    div.style.top = dog.y * tile_size + "px";
+    div.style.width = tile_size + "px";
+    div.style.height = tile_size + "px";
+    mapArea.appendChild(div);
+  });
+
+  let playerDiv = document.createElement("img");
+  playerDiv.src = `assets/char_${gameState.player.direction}.png`;
+  playerDiv.style.position = "absolute";
+  playerDiv.style.left = gameState.player.x * tile_size + "px";
+  playerDiv.style.top = gameState.player.y * tile_size + "px";
+  playerDiv.style.width = tile_size + "px";
+  playerDiv.style.height = tile_size + "px";
+
+  if (gameState.player.isFrozen) {
+    playerDiv.style.filter =
+      "brightness(50%) sepia(1) hue-rotate(180deg) saturate(3)";
+  }
+  mapArea.appendChild(playerDiv);
+}
+
+function handleGameOver() {
+  gameState.isPlaying = false;
+  gameOverModal.style.display = "block";
+  const title = document.getElementById("goTitle");
+  title.innerText = "Game Win!";
+
+  const formattedTime = formatTime(gameState.timer);
+  document.getElementById("goUsername").innerText = gameState.username;
+  document.getElementById("goTimer").innerText = formattedTime;
+  document.getElementById("goWalls").innerText = gameState.scores.walls;
+  document.getElementById("goTnt").innerText = gameState.scores.tnt;
+  document.getElementById("goIce").innerText = gameState.scores.ice;
+}
+
+function handleWin() {
+  gameState.isPlaying = false;
+  const popupGameWin = document.getElementById("popup-gameover");
+  popupGameWin.style.display = "block";
+  const title = document.getElementById("goTitle");
+  title.innerText = "Game Win!";
+
+  const formattedTime = formatTime(gameState.timer);
+  document.getElementById("goUsername").innerText = gameState.username;
+  document.getElementById("goTimer").innerText = formattedTime;
+  document.getElementById("goWalls").innerText = gameState.scores.walls;
+  document.getElementById("goTnt").innerText = gameState.scores.tnt;
+  document.getElementById("goIce").innerText = gameState.scores.ice;
+}
+
+// leaderboard
+function renderLeaderboardTable() {
+  let leaderboardData =
+    JSON.parse(localStorage.getItem("bombskuy_history")) || [];
+  leaderboardData.sort((a, b) => {
+    if (b.walls !== a.walls) {
+      return b.walls - a.walls;
+    }
+    if (b.tnt !== a.tnt) {
+      return b.tnt - a.tnt;
+    }
+    if (b.ice !== b.ice) {
+      return b.ice - a.ice;
+    }
+  });
+  const tableBody = document.getElementById("leaderboardData");
+  tableBody.innerHTML = "";
+  leaderboardData.forEach((player, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+            <td>#${index + 1}</td>
+            <td>${player.username}</td>
+            <td>${player.time}</td>
+            <td>${player.walls}</td>
+            <td>${player.tnt}</td>
+            <td>${player.ice}</td>
+        `;
+    tableBody.appendChild(row);
+  });
+}
+
+const btnSaveScore = document.getElementById("btnSave");
+const btnGoLeaderboard = document.getElementById("btnLeaderboards");
+const leaderboardModal = document.getElementById("leaderboardModal");
+const btnPlayAgain = document.getElementById("btnPlayAgain");
+const btnReset = document.getElementById("btnReset");
+
+btnSaveScore.addEventListener("click", function () {
+  saveScore();
+  btnSaveScore.disabled = true;
+  alert("Score successfully saved!");
+});
+btnGoLeaderboard.addEventListener("click", function () {
+  gameOverModal.style.display = "none";
+  renderLeaderboardTable();
+  leaderboardModal.style.display = "block";
+});
+btnPlayAgain.addEventListener("click", function () {
+  gameState.username = username.value;
+  gameState.difficulty = difficulty.value;
+  leaderboardModal.style.display = "block";
+  showCountdown();
+});
+btnReset.addEventListener("click", function () {
+  homeScreen.style.display = "block";
+  leaderboardModal.style.display = "none";
+});

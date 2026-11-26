@@ -46,6 +46,17 @@
         <h1 id="countdown">3</h1>
       </div>
 
+      <div id="pauseModal" class="modal">
+        <div class="popup-content">
+          <h2 class="popup-title">Game Paused</h2>
+          <p>
+            Game is currently paused. Press <b>ESC</b> again or click the button
+            below to resume.
+          </p>
+          <button id="btn-continue">Continue Game</button>
+        </div>
+      </div>
+
       <div class="gameScreen modal" id="gameScreen">
         <div class="gameBoard" id="gameBoard"></div>
         <div class="gameHUD" id="gameHUD">
@@ -73,28 +84,28 @@
       </div>
 
       <div class="modal" id="gameOverModal">
-        <h1>Game Over!</h1>
+        <h1 id="goTitle">Game Over!</h1>
         <p>
-          Good job <span id="playName"></span>! your time
-          <span id="playTime"></span> with results:
+          Good job <span id="goUsername"></span>! your time
+          <span id="goTimer"></span> with results:
         </p>
         <div class="results">
           <div class="resultInfo">
             <img src="assets/wall_crack.png" alt="" class="resultImg" />
-            <h3>= <span id="wallsResult">4</span></h3>
+            <h3>= <span id="goWalls">4</span></h3>
           </div>
           <div class="resultInfo">
-            <img src="assets/bomb.png" alt="" class="resultImg" />
-            <h3>= <span id="bombResult">0</span></h3>
+            <img src="assets/tnt.png" alt="" class="resultImg" />
+            <h3>= <span id="goTnt">0</span></h3>
           </div>
           <div class="resultInfo">
             <img src="assets/ice.png" alt="" class="resultImg" />
-            <h3>= <span id="iceResult">1</span></h3>
+            <h3>= <span id="goIce">1</span></h3>
           </div>
         </div>
         <div class="buttonsGameOver">
           <button id="btnSave" class="btn">Save Score</button>
-          <button id="btnLeadderboards" class="btn">Leaderboards</button>
+          <button id="btnLeaderboards" class="btn">Leaderboards</button>
         </div>
       </div>
 
@@ -102,13 +113,16 @@
         <h1>Leaderboards</h1>
         <table class="leaderboard" id="leaderboardTable">
           <tr>
+            <th>No</th>
             <th>Player Name</th>
             <th>Time</th>
             <th><img src="assets/wall_crack.png" alt="wallsCrack" /></th>
             <th><img src="assets/bomb.png" alt="bomb" /></th>
             <th><img src="assets/ice.png" alt="ice" /></th>
           </tr>
-          <tr></tr>
+          <tr>
+            <td id="leaderboardData"></td>
+          </tr>
         </table>
         <div class="buttonsLeaderboard">
           <button id="btnPlayAgain" class="btn">Play Again</button>
