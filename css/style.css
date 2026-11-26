@@ -92,7 +92,6 @@ input::placeholder {
 .gameScreen {
   background-color: black;
   flex-direction: row;
-  display: flex;
 }
 .gameBoard {
   width: 85vw;
@@ -106,6 +105,7 @@ input::placeholder {
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  background-color: #222;
 }
 .logoHUD {
   width: 13vw;
