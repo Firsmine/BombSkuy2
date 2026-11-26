@@ -29,7 +29,7 @@
       </div>
 
       <div class="modal" id="instructionModal">
-        <div class="head">
+        <div class="headModal">
           <h2>How to play game</h2>
           <button class="btnClose" id="btnClose">X</button>
         </div>
@@ -42,12 +42,33 @@
         </ol>
       </div>
 
+      <div class="modal" id="countdownModal">
+        <h1 id="countdown">3</h1>
+      </div>
+
       <div class="gameScreen modal" id="gameScreen">
         <div class="gameBoard" id="gameBoard"></div>
         <div class="gameHUD" id="gameHUD">
-          <h1>BOMSKUY</h1>
+          <img src="assets/logo_white.png" alt="" class="logoHUD" />
           <h3>Player : <span id="playerName">David</span></h3>
           <h3>Time : <span id="timerHUD">00:00</span></h3>
+          <div class="HUDInfo">
+            <div class="HUDHeart">
+              <img src="assets/heart_indicator.png" alt="" />
+            </div>
+            <div class="HUDresult">
+              <img src="assets/wall_crack.png" alt="" class="imgHUD" />
+              <h3>= <span id="wallsHUD">4</span></h3>
+            </div>
+            <div class="HUDresult">
+              <img src="assets/tnt.png" alt="" class="imgHUD" />
+              <h3>= <span id="bombHUD">0</span></h3>
+            </div>
+            <div class="HUDresult">
+              <img src="assets/ice.png" alt="" class="imgHUD" />
+              <h3>= <span id="iceHUD">1</span></h3>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -59,15 +80,15 @@
         </p>
         <div class="results">
           <div class="resultInfo">
-            <img src="" alt="" class="resultImg" />
+            <img src="assets/wall_crack.png" alt="" class="resultImg" />
             <h3>= <span id="wallsResult">4</span></h3>
           </div>
           <div class="resultInfo">
-            <img src="" alt="" class="resultImg" />
+            <img src="assets/bomb.png" alt="" class="resultImg" />
             <h3>= <span id="bombResult">0</span></h3>
           </div>
           <div class="resultInfo">
-            <img src="" alt="" class="resultImg" />
+            <img src="assets/ice.png" alt="" class="resultImg" />
             <h3>= <span id="iceResult">1</span></h3>
           </div>
         </div>
@@ -83,9 +104,9 @@
           <tr>
             <th>Player Name</th>
             <th>Time</th>
-            <th><img src="" alt="wallsCrack" /></th>
-            <th><img src="" alt="bomb" /></th>
-            <th><img src="" alt="ice" /></th>
+            <th><img src="assets/wall_crack.png" alt="wallsCrack" /></th>
+            <th><img src="assets/bomb.png" alt="bomb" /></th>
+            <th><img src="assets/ice.png" alt="ice" /></th>
           </tr>
           <tr></tr>
         </table>
