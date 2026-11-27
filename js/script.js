@@ -166,7 +166,7 @@ window.addEventListener("keydown", function (e) {
     if (gameState.isPaused) {
       pauseModal.classList.remove("hidden");
     } else {
-      pauseModal.classList.add("hidden");
+      countdownContinue();
     }
   }
   if (
@@ -179,9 +179,24 @@ window.addEventListener("keydown", function (e) {
 });
 const btnContinue = document.getElementById("btnContinue");
 btnContinue.addEventListener("click", function () {
-  gameState.isPaused = false;
-  pauseModal.classList.add("hidden");
+  countdownContinue();
 });
+function countdownContinue() {
+  pauseModal.classList.add("hidden");
+  countdownModal.style.display = "flex";
+  countdown = 3;
+  countdownDisplay.innerText = countdown;
+  clearInterval(countInterval);
+  countInterval = setInterval(() => {
+    countdown--;
+    countdownDisplay.innerText = countdown;
+    if (countdown === 0) {
+      clearInterval(countInterval);
+      countdownModal.style.display = "none";
+      gameState.isPaused = false;
+    }
+  }, 1000);
+}
 
 function updateGameLogic() {
   updateDogs();
@@ -235,7 +250,7 @@ function initPlayer() {
     x: 1,
     y: 1,
     lives: 3,
-    range: 3,
+    range: 1,
     isFrozen: false,
     direction: "down",
     hasItemMark: null,
@@ -345,7 +360,12 @@ function placeBomb() {
     (b) => b.x === gameState.player.x && b.y === gameState.player.y,
   );
   if (existingBomb) return;
-  const newBomb = { x: gameState.player.x, y: gameState.player.y, timer: 5000 };
+  const newBomb = {
+    x: gameState.player.x,
+    y: gameState.player.y,
+    range: gameState.player.range,
+    timer: 5000,
+  };
   gameState.bombs.push(newBomb);
   setTimeout(() => {
     explodeBomb(newBomb);
@@ -353,7 +373,7 @@ function placeBomb() {
 }
 function explodeBomb(bomb) {
   gameState.bombs = gameState.bombs.filter((b) => b !== bomb);
-  const range = gameState.player.range;
+  const range = bomb.range;
   const directions = [
     [0, -1],
     [0, 1],
@@ -413,9 +433,8 @@ function checkItemCollision() {
     const item = gameState.items[itemIndex];
     if (item.type === "heart") {
       playerHit();
-      return;
     } else if (item.type === "tnt") {
-      gameState.player.range = 2;
+      gameState.player.range *= 2;
       gameState.scores.tnt += 1;
     } else if (item.type === "ice") {
       gameState.player.isFrozen = true;
@@ -474,6 +493,18 @@ function renderGraphics() {
     div.style.height = tile_size + "px";
     mapArea.appendChild(div);
   });
+  gameState.explosions.forEach((explosion) => {
+    explosion.coords.forEach((coord) => {
+      let explosionDiv = document.createElement("img");
+      explosionDiv.src = `/assets/explosion.png`;
+      explosionDiv.style.position = "absolute";
+      explosionDiv.style.left = coord.x * tile_size + "px";
+      explosionDiv.style.top = coord.y * tile_size + "px";
+      explosionDiv.style.width = tile_size + "px";
+      explosionDiv.style.height = tile_size + "px";
+      mapArea.appendChild(explosionDiv);
+    });
+  });
 
   gameState.dogs.forEach((dog) => {
     let div = document.createElement("img");
@@ -506,6 +537,7 @@ function renderGraphics() {
 function handleGameOver() {
   gameState.isPlaying = false;
   gameOverModal.style.display = "flex";
+  btnSaveScore.disabled = false;
   const title = document.getElementById("goTitle");
   title.innerText = "Game Over!";
   updateGameOverInfo();
@@ -590,5 +622,6 @@ btnPlayAgain.addEventListener("click", function () {
 });
 btnReset.addEventListener("click", function () {
   homeScreen.style.display = "flex";
+  gameScreen.style.display = "none";
   leaderboardModal.style.display = "none";
 });
