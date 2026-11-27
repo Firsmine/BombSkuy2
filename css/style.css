@@ -11,9 +11,31 @@ body {
   align-items: center;
   flex-direction: column;
   position: relative;
-  height: 100vh;
-  width: 100vw;
   overflow: hidden;
+}
+.container {
+  margin-top: 3rem;
+  height: 600px;
+  width: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+.pause {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  inset: 0;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+}
+.pause.hidden {
+  display: none;
 }
 .modal {
   display: none;
@@ -23,7 +45,7 @@ body {
   flex-direction: column;
   inset: 0;
   z-index: 100;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   color: white;
 }
 #countdown {
@@ -94,10 +116,14 @@ input::placeholder {
   flex-direction: row;
 }
 .gameBoard {
-  width: 85vw;
-  height: 100%;
+  margin-top: 10px;
+  width: 1020px;
+  height: 610px;
   justify-content: left;
-  background-color: grey;
+  background: #222;
+  background-image: url("/assets/background.jpg");
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 .gameHUD {
   width: 15vw;
@@ -123,4 +149,22 @@ input::placeholder {
 }
 .HUDresult {
   display: flex;
+}
+.results {
+  display: flex;
+  flex-direction: row;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.resultInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin-right: 2rem;
+}
+.leaderboard {
+  width: 500px;
+  text-align: center;
+  margin: 2rem 0;
 }

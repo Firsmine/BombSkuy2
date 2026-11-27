@@ -46,41 +46,37 @@
         <h1 id="countdown">3</h1>
       </div>
 
-      <div id="pauseModal" class="modal">
-        <div class="popup-content">
-          <h2 class="popup-title">Game Paused</h2>
-          <p>
-            Game is currently paused. Press <b>ESC</b> again or click the button
-            below to resume.
-          </p>
-          <button id="btn-continue">Continue Game</button>
-        </div>
-      </div>
-
       <div class="gameScreen modal" id="gameScreen">
         <div class="gameBoard" id="gameBoard"></div>
         <div class="gameHUD" id="gameHUD">
           <img src="assets/logo_white.png" alt="" class="logoHUD" />
-          <h3>Player : <span id="playerName">David</span></h3>
-          <h3>Time : <span id="timerHUD">00:00</span></h3>
+          <h3>Player : <span id="nameHUD">David</span></h3>
+          <h3>Time : <span id="timeHUD">00:00</span></h3>
           <div class="HUDInfo">
-            <div class="HUDHeart">
-              <img src="assets/heart_indicator.png" alt="" />
-            </div>
+            <div id="livesHUD"></div>
             <div class="HUDresult">
               <img src="assets/wall_crack.png" alt="" class="imgHUD" />
-              <h3>= <span id="wallsHUD">4</span></h3>
+              <h3>= <span id="wallsHUD">0</span></h3>
             </div>
             <div class="HUDresult">
               <img src="assets/tnt.png" alt="" class="imgHUD" />
-              <h3>= <span id="bombHUD">0</span></h3>
+              <h3>= <span id="tntHUD">0</span></h3>
             </div>
             <div class="HUDresult">
               <img src="assets/ice.png" alt="" class="imgHUD" />
-              <h3>= <span id="iceHUD">1</span></h3>
+              <h3>= <span id="iceHUD">0</span></h3>
             </div>
           </div>
         </div>
+      </div>
+
+      <div id="pauseModal" class="pause hidden">
+        <h2>Game Paused</h2>
+        <p>
+          Game is currently paused. Press <b>ESC</b> again or click the button
+          below to resume.
+        </p>
+        <button id="btnContinue" class="btn">Continue Game</button>
       </div>
 
       <div class="modal" id="gameOverModal">
@@ -92,7 +88,7 @@
         <div class="results">
           <div class="resultInfo">
             <img src="assets/wall_crack.png" alt="" class="resultImg" />
-            <h3>= <span id="goWalls">4</span></h3>
+            <h3>= <span id="goWalls">0</span></h3>
           </div>
           <div class="resultInfo">
             <img src="assets/tnt.png" alt="" class="resultImg" />
@@ -100,7 +96,7 @@
           </div>
           <div class="resultInfo">
             <img src="assets/ice.png" alt="" class="resultImg" />
-            <h3>= <span id="goIce">1</span></h3>
+            <h3>= <span id="goIce">0</span></h3>
           </div>
         </div>
         <div class="buttonsGameOver">
@@ -111,7 +107,13 @@
 
       <div class="modal" id="leaderboardModal">
         <h1>Leaderboards</h1>
-        <table class="leaderboard" id="leaderboardTable">
+        <table
+          class="leaderboard"
+          id="leaderboardTable"
+          border="1"
+          cellpadding="10"
+          cellspacing="0"
+        >
           <tr>
             <th>No</th>
             <th>Player Name</th>
@@ -121,7 +123,7 @@
             <th><img src="assets/ice.png" alt="ice" /></th>
           </tr>
           <tr>
-            <td id="leaderboardData"></td>
+            <tbody id="leaderboardData"></tbody>
           </tr>
         </table>
         <div class="buttonsLeaderboard">
